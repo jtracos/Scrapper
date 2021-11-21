@@ -7,7 +7,3 @@ TH = 'https://www.tabascohoy.com'
 
 LINKS = '//div/div/a[@rel=\"bookmark\"]/div/div/h2/../../.././@href'
 TITLE = '//div/div/a[@rel="bookmark"]/div/div/h2/text()'
-
-CORPUS = '//div[@class="theiaPostSlider_preloadedSlide"]/p/text()'
-TITLE_CORPUS = '//h1[@class="mvp-post-title left entry-title"]/text()'
-DATE = '//time[@class="post-date updated"]/@datetime'
