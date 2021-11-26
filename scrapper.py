@@ -1,71 +1,75 @@
 import requests
 from lxml import html
-import xpath
+import patterns
 from datetime import datetime
 import os
-class scrapper:
+from common import *
 
-    def __init__(self,url):
-        self.url = url
 
+class Scrapper:
+
+    def __init__(self, site):
+        self.host = config()['sites'][site]['url']
 
     def parse_note(self, link, current_date):
         try:
-            link = self.url + link
-            
+            link = self.host + link
+
             response = requests.get(link)
             if response.status_code == 200:
-                diario = self.url.replace("www.","").lower().replace("https://","").replace(".","-")
-                home = response.content.decode("utf-8")
-                parsed_home = html.fromstring(home)
-                date = parsed_home.xpath(xpath.AR_DATE)[0].replace("/","-")
+                diario = self.host.replace("www.", "").lower().replace("https://", "").replace(".", "-")
+                date = self.parse_page(response, patterns.AR_DATE)[0].replace("/", "-")
                 print(date)
-                body = parsed_home.xpath(xpath.AR_BODY)
-                resumen = parsed_home.xpath(xpath.AR_RESUMEE)
-                title = parsed_home.xpath(xpath.AR_TITLE)[0].replace("¿","").replace("?","").\
-                    replace("¡","").replace("!","").strip().replace(".","_").replace(" ","-")
-                    #entradas para fecha corriente y fecha de la nota
+                body = self.parse_page(response, patterns.AR_BODY)
+                resumen = self.parse_page(response, patterns.AR_RESUMEE)
+                title = self.parse_page(response, patterns.AR_TITLE)[0]
+                title_ = self.set_title(title)
+
+                # entradas para fecha corriente y fecha de la nota
                 p = f"./{diario}/{current_date}/{date}"
                 if not os.path.isdir(p):
                     os.makedirs(p)
-
-                with open(p + f"/{title}.txt", mode="w") as f:
-                    f.write(title.upper())
-                    f.write("\n" + date)
-                    f.write("\n\n")
-                    for line in resumen:
-                        f.write(line)
+                try:
+                    with open(p + f"/{title_}.txt", mode="w") as f:
+                        f.write(title.upper().strip().replace("\n", " "))
+                        # f.write("\n" + date)
                         f.write("\n")
-                    for line in body:
-                        f.write(line)
-                        f.write("\n")
+                        for line in resumen:
+                            f.write(line.strip().replace("\n", " "))
+                            f.write("\n")
+                        for line in body:
+                            f.write(line)
+                            f.write("\n")
+                except:
+                    pass
 
             else:
                 raise ValueError(f"Codigo de error: {response.status_code}")
         except ValueError as ve:
             print(ve)
 
-
-    def main(self):
+    def retrieve(self):
         try:
-            response = requests.get(xpath.DP)
+            response = requests.get(self.host)
             if response.status_code == 200:
-                home = response.content.decode("utf-8")
-                parsed = html.fromstring(home)
-                links= parsed.xpath(xpath.DP_LINKS)
-                DATE_STR = datetime.today().strftime("%d-%m-%Y")
+                links = self.parse_page(response, patterns.DP_LINKS)
+                date_str = datetime.today().strftime("%d-%m-%Y")
                 for link in links:
-                    self.parse_note(link, DATE_STR)
+                    self.parse_note(link, date_str)
             else:
                 raise ValueError(f"Error: {response.status_code}")
         except ValueError as ve:
             print(ve)
-    
 
-    def __call__(self,):
-        self.main()
+    def __call__(self, ):
+        self.retrieve()
+
+    @staticmethod
+    def parse_page(response, xpath):
+        home = response.content.decode("utf-8")
+        parsed = html.fromstring(home)
+        return parsed.xpath(xpath)
 
 
 if __name__ == "__main__":
-
-    scrapper(xpath.DP)()
+    Scrapper(patterns.DP)()
