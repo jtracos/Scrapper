@@ -1,12 +1,15 @@
 import argparse
-
 import yaml
-
 from common import config
 import logging
 from scrapper import Scrapper
 
 logger = logging.getLogger(__name__)
+
+def start(uid):
+    logging.info("comenzando minado en {}".format(uid))
+    scrapper = Scrapper(uid)
+    scrapper()
 
 
 if __name__ == "__main__":
@@ -18,8 +21,4 @@ if __name__ == "__main__":
                         choices=new_site_choices)
 
     args = parser.parse_args()
-    print(args.sites)
-    scrapper = Scrapper(args.sites)
-    scrapper()
-
-help(yaml.load)
+    start(args.sites)
