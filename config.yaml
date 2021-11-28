@@ -1,3 +1,10 @@
 sites:
   diariopresente:
     url: https://www.diariopresente.mx
+    links: //article/div[@class = 'detail']/div[@class='info']/span/i[@class='fa fa-calendar-o']/../../..//div[contains(@class,'caption')]/a/@href
+    article:
+      header: //div/div[@class='caption']/text()
+      date: //div[@class='detail']/div[@class='info']/span[@class='date']/i[@class='fa fa-calendar-o']/../text()
+      resumen: //div[@class='detail']/div[contains(@style,'color')]/text()
+      body: //p/span/font/text()
+

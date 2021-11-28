@@ -10,20 +10,21 @@ logger = logging.getLogger(__name__)
 class Scrapper:
 
     def __init__(self, site):
-        self.host = config()['sites'][site]['url']
+        self._host = config()['sites'][site]['url']
+        self.__site = site
 
     def parse_note(self, link, current_date):
         try:
-            link = self.host + link
+            link = self._host + link
 
             response = requests.get(link)
             if response.status_code == 200:
-                diario = self.host.replace("www.", "").lower().replace("https://", "").replace(".", "-")
-                date = self.parse_page(response, patterns.AR_DATE)[0].replace("/", "-")
+                diario = self._host.replace("www.", "").lower().replace("https://", "").replace(".", "-")
+                date = self.parse_page(response, config()["sites"][self.__site]["article"]["date"])[0].replace("/", "-")
                 print(date)
-                body = self.parse_page(response, patterns.AR_BODY)
-                resumen = self.parse_page(response, patterns.AR_RESUMEE)
-                title = self.parse_page(response, patterns.AR_TITLE)[0]
+                body = self.parse_page(response, config()["sites"][self.__site]["article"]["body"])
+                resumen = self.parse_page(response, config()["sites"][self.__site]["article"]["resumen"])
+                title = self.parse_page(response, config()["sites"][self.__site]["article"]["header"])[0]
                 title_ = self.set_title(title)
 
                 # entradas para fecha corriente y fecha de la nota
@@ -50,7 +51,7 @@ class Scrapper:
 
     def retrieve(self):
         try:
-            response = requests.get(self.host)
+            response = requests.get(self._host)
             if response.status_code == 200:
                 links = self.parse_page(response, patterns.DP_LINKS)
                 date_str = datetime.today().strftime("%d-%m-%Y")
