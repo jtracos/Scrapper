@@ -1,6 +1,6 @@
 #smn
-imgFc24h = "//div[@class=\"col-lg-6 col-md-6\"]/div/a/img/@src"
-smn = "https://smn.conagua.gob.mx/es/pronosticos/pronosticossubmenu/pronostico-meteorologico-especial-cuencas-96h"
+#imgFc24h = "//div[@class=\"col-lg-6 col-md-6\"]/div/a/img/@src"
+#smn = "https://smn.conagua.gob.mx/es/pronosticos/pronosticossubmenu/pronostico-meteorologico-especial-cuencas-96h"
 #TH
 
 #TH = 'https://www.tabascohoy.com'
