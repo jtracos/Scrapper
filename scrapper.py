@@ -5,6 +5,7 @@ from datetime import datetime
 import os
 from common import *
 import logging
+import psycopg2
 
 logger = logging.getLogger(__name__)
 class Scrapper:
@@ -41,13 +42,13 @@ class Scrapper:
                         f.write("\n")
                     for line in body:
                         f.write(line)
-                        f.write("\n")
-            
+                        f.write("\n")            
 
             else:
                 raise ValueError(f"Codigo de error: {response.status_code}")
         except ValueError as ve:
             print(ve)
+
 
     def retrieve(self):
         try:
@@ -62,14 +63,13 @@ class Scrapper:
         except ValueError as ve:
             print(ve)
 
-    def __call__(self, ):
-        self.retrieve()
 
     @staticmethod
     def parse_page(response, xpath):
         home = response.content.decode("utf-8")
         parsed = html.fromstring(home)
         return parsed.xpath(xpath)
+
 
     def set_title(self, title):
         import re
@@ -78,6 +78,39 @@ class Scrapper:
         return "".join(match).strip().replace(" ","-")
 
 
-if __name__ == "__main__":
-    scrapper = Scrapper(patterns.DP)
-    scrapper.retrieve()
+class Postgresconection:
+
+    def __init__(self, host, port):
+        self.host = host
+        self.port = port
+
+
+    def execute(self, query, password, **kwargs):
+        with psycopg2.connect(
+                user = config()["conection"]["user"],
+                password = password,
+                host = config()["conection"]["host"],
+                port = config()["conection"]["port"] 
+                ) as conn:
+            conn.execute(query()
+
+
+    @property
+    def host(self):
+        return self.host
+
+    @property
+    def port(self):
+        return self.port
+
+
+
+
+
+
+    
+
+
+
+
+
