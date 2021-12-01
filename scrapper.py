@@ -67,7 +67,7 @@ class Scrapper:
     @staticmethod
     def parse_page(response, xpath):
         home = response.content.decode("utf-8")
-        parsed = html.fromstring(home)
+        parsedcd  = html.fromstring(home)
         return parsed.xpath(xpath)
 
 
