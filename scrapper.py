@@ -78,32 +78,6 @@ class Scrapper:
         return "".join(match).strip().replace(" ","-")
 
 
-class Postgresconection:
-
-    def __init__(self, host, port):
-        self.host = host
-        self.port = port
-
-
-    def execute(self, query, password, **kwargs):
-        with psycopg2.connect(
-                user = config()["conection"]["user"],
-                password = password,
-                host = config()["conection"]["host"],
-                port = config()["conection"]["port"] 
-                ) as conn:
-            conn.execute(query()
-
-
-    @property
-    def host(self):
-        return self.host
-
-    @property
-    def port(self):
-        return self.port
-
-
 
 
 
