@@ -1,15 +1,27 @@
 import argparse
 import yaml
-from common import config
+import os
+from common import config, save, __config
+from lxml import html
 import logging
-from scrapper import Scrapper
+import os
+from scrapper import *
 
 logger = logging.getLogger(__name__)
 
-def start(uid):
-    logging.info("comenzando minado en {}".format(uid))
-    scrapper = Scrapper(uid)
-    scrapper()
+
+def scrapper(site):
+    import requests
+    logging.info("comenzando minado en {}".format(site))
+
+    home = Home(site)
+    article = Article(site)
+    home.parse()
+    
+    for link in home.links:
+        article.set_path(link)
+        article.parse()
+        print(article.title.strip())
 
 
 if __name__ == "__main__":
@@ -21,4 +33,4 @@ if __name__ == "__main__":
                         choices=new_site_choices)
 
     args = parser.parse_args()
-    start(args.sites)
+    scrapper(args.sites)
