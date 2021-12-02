@@ -1,8 +1,10 @@
 import yaml
-
+from datetime import datetime
+import re
+import os
 __config = None
 
-
+current_date = datetime.today().strftime("%d-%m-%Y")
 def config():
     import yaml
     global __config
@@ -19,4 +21,11 @@ def save(path, name, *args):
             for x in args:
                 f.write(x)
                 f.write("\n")
-                  
+
+def set_name(title):
+    title = title.strip()
+    pattern = re.compile(r"[A-Za-z\s]+")
+    res= "".join(pattern.findall(title))
+    return res.replace(" ","-")+".txt"
+    
+    

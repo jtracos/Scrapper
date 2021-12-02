@@ -82,7 +82,7 @@ class Article(Parser):
     
     @property
     def date(self):
-        return self.extract(config()['sites'][self._site]['article']['date'])
+        return self.extract(config()['sites'][self._site]['article']['date'])[0]
 
     @property
     def body(self):

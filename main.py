@@ -1,7 +1,7 @@
 import argparse
 import yaml
 import os
-from common import config, save, __config
+from common import config, save, __config, current_date, set_name
 from lxml import html
 import logging
 import os
@@ -15,13 +15,15 @@ def scrapper(site):
     logging.info("comenzando minado en {}".format(site))
 
     home = Home(site)
-    article = Article(site)
     home.parse()
-    
+    article = Article(site)
     for link in home.links:
         article.set_path(link)
         article.parse()
+        date = article.date.replace("/","-")
+        p = f"./{'diariopresente'}/{current_date}/{date}"
         print(article.title.strip())
+        save(p, set_name(article.title), article.title, article.resumen, article.body)
 
 
 if __name__ == "__main__":
