@@ -12,7 +12,7 @@ logger = logging.getLogger(__name__)
 
 def scrapper(site):
     import requests
-    logging.info("comenzando minado en {}".format(site))
+    logging.warning("comenzando minado en {}".format(site))
 
     home = Home(site)
     home.parse()
