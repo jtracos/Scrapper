@@ -87,18 +87,18 @@ class Article(Parser):
     @property
     def body(self):
         corpus = self.extract(config()['sites'][self._site]['article']['body'])
-        return "\n".join(corpus)
+        return "\n".join(corpus).strip()
 
     @property
     def resumen(self):
         resumen = self.extract(config()['sites'][self._site]['article']['resumen'])
-        return "\n".join(resumen)
+        return "\n".join(resumen).strip()
 
 
     @property
     def title(self):
         title = self.extract(config()['sites'][self._site]['article']['header'])
-        return "\n".join(title)
+        return "\n".join(title).strip()
 
 
     
