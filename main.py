@@ -21,8 +21,8 @@ def scrapper(site):
         article.set_path(link)
         article.parse()
         date = article.date.replace("/","-")
-        p = f"./{'diariopresente'}/{current_date}/{date}"
-        print(article.title)
+        p = f"./{site}/{current_date}/{date}"
+        print(article.title.strip())
         save(p, set_name(article.title), article.title, article.resumen, article.body)
 
 
