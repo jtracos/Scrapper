@@ -60,6 +60,7 @@ class Article(Parser):
 
     def __init__(self, site):
         self._path = None
+        self.url = None
         super().__init__(site)
     
     def set_path(self,path):
@@ -68,7 +69,8 @@ class Article(Parser):
         
     def parse(self):
         if  self._page is None and self._path is not None:
-            response = requests.get(config()["sites"][self._site]["url"] + self._path)
+            self.url = config()["sites"][self._site]["url"] + self._path
+            response = requests.get(self.url)
             content = response.content.decode("utf-8")
             if response.status_code == 200:
                 self._page = html.fromstring(content)
@@ -91,8 +93,8 @@ class Article(Parser):
 
     @property
     def resumen(self):
-        resumen = self.extract(config()['sites'][self._site]['article']['resumen'])
-        return "\n".join(resumen).strip()
+        res = self.extract(config()['sites'][self._site]['article']['resumen'])
+        return "".join(res).strip()
 
 
     @property
